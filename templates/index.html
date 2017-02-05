@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}
+Just a test page
+{% endblock %}
+
+{% block body %}
+<h1>Hello World</h1>
+{% for p in posts %}
+<ul>
+    {{ p }}
+</ul>
+{% endfor %}
+{% endblock %}
+
+{% block foot %}
+<h5>Powered by KeyboardMan</h5>
+{% endblock %}
