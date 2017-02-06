@@ -7,7 +7,12 @@ Just a test page
 <h1>Hello World</h1>
 {% for p in posts %}
 <ul>
-    {{ p }}
+    <h3>{{ p.title }} - {{ p.author }}</h3>
+    {% for tag in p.tags %}
+        {{ tag }}
+    {% endfor %}
+    <p> posted on {{ p.pub_date }}</p>
+    <p> {{ p.content }}</p>
 </ul>
 {% endfor %}
 {% endblock %}
