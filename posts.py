@@ -4,7 +4,7 @@
 Posts operations
 """
 
-from db import DbConn
+from common.db import DbConn
 from models import Post
 
 def list_all():

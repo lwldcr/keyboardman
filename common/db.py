@@ -9,11 +9,11 @@ import os
 from contextlib import closing
 
 RootDir = os.path.dirname(__file__)
-DB = os.path.join(RootDir, 'data', 'posts.db')
+DB = os.path.join(RootDir, '..', 'data', 'posts.db')
 
 
-def connect_db():
-    return sqlite3.connect(DB)
+def connect_db(db=DB):
+    return sqlite3.connect(db)
 
 
 def init_db():
@@ -24,8 +24,8 @@ def init_db():
 
 
 class DbConn(object):
-    def __init__(self):
-        self.db = DB
+    def __init__(self, db=DB):
+        self.db = db
         self.conn = None
 
     def __enter__(self):
@@ -34,6 +34,7 @@ class DbConn(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
+            self.conn.commit()
             self.conn.close()
         except Exception as e:
             print(e)

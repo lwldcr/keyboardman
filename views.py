@@ -4,6 +4,7 @@ from base import app
 from flask import render_template
 import posts
 
+
 @app.route("/")
 def index():
     all_posts = posts.list_all()
