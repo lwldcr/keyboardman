@@ -35,15 +35,16 @@ def get_posts_by_author(author):
 
 def get_posts_by_tag(tag):
     """get posts by tag"""
-    return ["post1", "post2"]
+    tag = '%{}%'.format(tag)
+    return get_post('tag', tag, schema='like')
 
 
-def get_post(keytype, key):
+def get_post(keytype, key, schema='='):
     """general get post method"""
     posts = []
-    sql = "select * from posts where {} = '{}'"
+    sql = "select * from posts where {} {} '{}'"
     if keytype and key:
-        sql = sql % (keytype, key)
+        sql = sql.format(keytype, schema, key)
     else:
         return posts
 
