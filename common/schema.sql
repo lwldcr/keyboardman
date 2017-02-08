@@ -7,5 +7,12 @@ CREATE TABLE if not EXISTS `posts` (
   `tags` char(256)
 );
 
-INSERT into `posts` (title, content, pub_date, author, tags) values ("post1", "hello from flask", "2017-02-01 12:03:21", "Bruce Lee", "test,first");
-INSERT into `posts` (title, content, pub_date, author, tags) values ("post2", "hello again from flask", "2017-02-11 12:13:21", "Bruce Lee", "test");
+CREATE TABLE if not EXISTS `users` (
+  `id` INTEGER PRIMARY KEY autoincrement not null,
+  `username` char(256) not null,
+  `password` char(256) not null,
+  `activated` bool not null default true,
+  `permission_level` INTEGER not null default 10
+);
+
+INSERT into `users` (username, password) VALUES ('bruce', 'e8315caa4eb8c2a2625d4e97dbba100a')
