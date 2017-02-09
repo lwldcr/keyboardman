@@ -6,8 +6,13 @@ __author__ = 'LIWEI240'
 Todo app models definition
 """
 
+import os
 import datetime
 from enum import Enum
+from common.db import DbConn
+
+pwd = os.path.dirname(__file__)
+DB = os.path.join(pwd, '..', 'data', 'todo.db')
 
 TIME_FMT = "%Y-%m-%d %H:%M:%S"
 
@@ -24,13 +29,43 @@ class Status(Enum):
     overdue = 5
 
 
+class Category(object):
+    """Todo Category"""
+    def __init__(self, name, extra=''):
+        self.name = name
+        self.extra = extra
+
+    def __repr__(self):
+        return '<Category: {}>'.format(
+            self.name
+        )
+
+    @classmethod
+    def get(cls, category_id):
+        sql = "select * from category where id = {}".format(category_id)
+        with DbConn(DB) as db:
+            try:
+                cur = db.execute(sql)
+                raw_data = cur.fetchone()
+            except Exception as e:
+                raw_data = []
+
+        category = None
+        if raw_data:
+            keys = ['name', 'extra']
+            category = Category(**dict(zip(keys, raw_data[1:])))
+            category.id = raw_data[0]
+        return category
+
+
 class Todo(object):
     """Todo class
 
         define a todo class
     """
-    def __init__(self, title, desc='', start='', end='', level=3, status=Status.not_started.name, id=-1):
+    def __init__(self, title, desc='', start='', end='', level=3, status=Status.not_started.name, id=-1, category_id=1):
         self.id = id
+        self.category_id = category_id
         self.title = title
         self.desc = desc
         if not start:
@@ -51,6 +86,15 @@ class Todo(object):
 
     def done(self):
         self.status = Status.done.name
+
+    def change_category(self, category_id):
+        """change todo's category"""
+        new_category = Category.get(category_id)
+        if not new_category:
+            return False
+        else:
+            self.category_id = category_id
+            return True
 
     def __repr__(self):
         return '<Todo: {}, status: {}, ends: {}>'.format(

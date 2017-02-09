@@ -4,3 +4,9 @@ TODO:
 3 todo UI
 4 page displaying
 5 log feature
+
+Views
+1 index/list/mainpage => post lists
+2 detail: post detail
+3 add/edit: post modify, edit
+4 admin: post management

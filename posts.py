@@ -103,3 +103,7 @@ def delete_post(pid):
         return True
     except Exception as e:
         return False
+
+
+if __name__ == '__main__':
+    print(list_all())

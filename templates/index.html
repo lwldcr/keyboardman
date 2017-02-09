@@ -1,22 +1,64 @@
 {% extends "base.html" %}
-{% block title %}
-Just a test page
-{% endblock %}
 
 {% block body %}
-<h1>Hello World</h1>
-{% for p in posts %}
-<ul>
-    <h3>{{ p.title }} - {{ p.author }}</h3>
-    {% for tag in p.tags %}
-        {{ tag }}
-    {% endfor %}
-    <p> posted on {{ p.pub_date }}</p>
-    <p> {{ p.content }}</p>
-</ul>
-{% endfor %}
-{% endblock %}
+<div class="container">
+	<div class="page-header">
+		<div class="row">
+			    <div class="col-md-3"></div>
+			    <div class="col-md-6">
+			    		<div class="list-group">
+                        <ul class="posts">
+                            {% for post in posts %}
+                                <li class="post">
+                                <div class="post-content">
+                                <div class="post-date">{{ post.pub_date }}</div>
+                                    <div class="post-auth">{{ post.author }}</div>
+                                    <div class="post-title text-primary">
+                                        {% if post.title %}
+                                            <h1>{{ post.title }}</h1>
+                                        {% endif %}
+                                    </div>
+                                <div class="post-body">
+                                    {% if post.body_html %}
+                                        {{ post.body_html| safe }}
+                                    {% else %}
+                                        {{ post.body }}
+                                    {% endif %}
+                                </div>
+                <div class="post-footer">
+                    <a href="{{ url_for('post_detail',pid=post.id) }}">
+                        <span class="label label-success">阅读全文</span>
+                    </a>
+                {% if session.username %}
+                    <a href="{{ url_for('post_detail',pid=post.id) }}#comments">
+                        <span class="label label-primary">{{ post.tags }}评论</span>
+                    </a>
+                    {% if session.username == post.author %}
 
-{% block foot %}
-<h5>Powered by KeyboardMan</h5>
+                    <a href="{{ url_for('post_edit', pid=post.id) }}">
+                        <span class="label label-primary">修改</span></a>
+                    <a href="{{ url_for('post_delete', pid=post.id) }}">
+                            <span class="label label-danger">删除</span>
+                    </a>
+                    {% endif %}
+
+
+                    {% if session.permission >= 10 %}
+                    <a href="{{ url_for('post_edit', pid=post.id) }}">
+                        <span class="label label-danger">修改 [管理员]</span>
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+                        </div>
+				</div>
+		    </div>
+		    <div class="col-md-3"></div>
+		  </div>
+	</div>
+</div>
 {% endblock %}

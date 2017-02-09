@@ -5,12 +5,17 @@ __author__ = 'LIWEI240'
 Models definition
 """
 
+import os
 from hashlib import md5
-from flask_login import UserMixin
+from common.db import DbConn
+
+pwd = os.path.dirname(__file__)
+DB = os.path.join(pwd, 'data', 'posts.db')
 
 
 class Post(object):
     __attrs__ = ["id", "title", "content", "pub_date", "author", "tags"]
+
     def __init__(self, data):
         for attr, val in zip(self.__attrs__, data):
             if attr == "id":
@@ -39,7 +44,7 @@ class Author(object):
         )
 
 
-class User(UserMixin):
+class User(object):
     """User class"""
     def __init__(self, username, password, id=-1, activated=True, permission=10):
         self.id = id
@@ -48,31 +53,42 @@ class User(UserMixin):
         self.activated = activated
         self.permission = permission
 
+
     @classmethod
-    def get(cls, user_id):
-        return User("user", "pass", 10)
+    def get_user_by_name(cls, username):
+        """Get user by given username"""
+        sql = "select * from `users` where username = '{}'".format(username)
 
-    def is_authenticated(self):
-        print('permi', self.permission)
-        return self.permission <= 10
+        try:
+            with DbConn(DB) as conn:
+                cur = conn.execute(sql)
+                data = cur.fetchone()
+            if data:
+                user = User(data[1], data[2], data[0], data[3], data[4])
+            else:
+                user = None
+        except Exception as e:
+            user = None
+        return user
 
-    def is_active(self):
-        return self.activated
-
-    def is_anonymouse(self):
-        return False
-
-    def get_id(self):
-        return md5(str(self.id).encode('utf-8')).hexdigest()
-
-    def check_password(self, passwd):
-        print('given passwd:', passwd)
-        if md5(str(passwd).encode('utf-8')).hexdigest() == self.password:
-            return True
-        return False
+    @classmethod
+    def verify(cls, username, password, user_obj):
+        try:
+            user_obj = User.get_user_by_name(username)
+#            print(user, password, user_obj.username, user_obj.password)
+            if md5(str(password).encode('utf-8')).hexdigest() == user_obj.password:
+                return True
+        except Exception as e:
+            print(e)
+            return False
 
     def __repr__(self):
         return '<User: {}, activated: {}>'.format(
             self.username,
-            self.activated
+            self.password
         )
+
+
+if __name__ == '__main__':
+    u = User.get_user_by_name("bruce")
+    print(u)

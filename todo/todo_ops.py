@@ -7,10 +7,9 @@ Todo objects persistent and management
 """
 
 import os
-import json
 from common.db import DbConn
 from common.const import Const
-from todo.model import Todo
+from todo.model import Todo, Category
 
 pwd = os.path.dirname(__file__)
 DB = os.path.join(pwd, '..', 'data', 'todo.db')
@@ -117,5 +116,6 @@ def delete_todo(todo_id, ret):
     return ret
 
 if __name__ == '__main__':
-    init_todo()
+    #init_todo()
     print(list_all())
+    print(Category.get(1))

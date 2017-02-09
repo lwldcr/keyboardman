@@ -1,0 +1,6 @@
+1 url design
+/;/index    Home Page
+/p/<id>     Detail page
+/p/add      Add new post
+/p/<id>/edit     Edit post
+/admin      Admin page

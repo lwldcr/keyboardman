@@ -2,13 +2,6 @@
 
 import views
 from base import app
-from admin import MyView
-
-
-# flask admin
-from flask_admin import Admin
-admin = Admin(app, name='管理')
-admin.add_view(MyView(name="admin_index"))
 
 # blueprints
 from todo import todo
