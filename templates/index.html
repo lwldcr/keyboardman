@@ -31,7 +31,7 @@
                     </a>
                 {% if session.username %}
                     <a href="{{ url_for('post_detail',pid=post.id) }}#comments">
-                        <span class="label label-primary">{{ post.tags }}评论</span>
+                        <span class="label label-primary">{% if post.tags_valid() %}{{ post.tags }}{% endif %}评论</span>
                     </a>
                     {% if session.username == post.author %}
 

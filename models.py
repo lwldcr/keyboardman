@@ -31,6 +31,14 @@ class Post(object):
             self.author
         )
 
+    def tags_valid(self):
+        if not self.tags:
+            return False
+        if type(self.tags) != list:
+            return False
+        if len(''.join(self.tags)) <= 0:
+            return False
+        return True
 
 class Author(object):
     def __init__(self, name, desc):
