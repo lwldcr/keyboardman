@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form action="{{ url_for('post_create') }}" method="post">
+                <div class="row">
+                    <input type="text" class="form-control" id="username" placeholder="请输入标题" name="title" required>
+                </div>
+
+                <div class="row">
+                    <textarea name="editor1" id="editor1" rows="20" cols="80" class="ckeditor">
+                        在这里输入正文
+                    </textarea>
+                </div>
+                <span class="panel-info"></span>
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-circle">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+{%  endblock %}

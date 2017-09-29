@@ -5,8 +5,10 @@ from flask import render_template, flash, request, abort, redirect,\
     url_for, session, jsonify
 import posts
 from utils import is_safe_url
-from models import User, add_user
+from models import User, add_user, Post
+from posts import add_post
 import re
+import datetime
 
 html_filter = re.compile(r'\<.*?\>')
 
@@ -45,6 +47,27 @@ def post_detail(pid):
     return render_template("post.html", post=post)
 
 
+@app.route("/post/create", methods=["GET", "POST"])
+def post_create():
+    if request.method == 'GET':
+        return render_template("post_create.html")
+    else:
+        title = request.form.get('title')
+        text = request.form.get('editor1')
+        tags = html_filter.findall(text)
+        for tag in tags:
+            text = text.replace(tag, '')
+
+        p = Post([-1, title.encode('utf-8'), text.encode('utf-8'),
+                  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), session.get('username'), ''])
+
+        ret = add_post(p)
+        if ret:
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('post_create'))
+
+
 @app.route("/post/<int:pid>/edit", methods=["GET", "POST"])
 def post_edit(pid):
     post = posts.get_post_by_id(pid)
@@ -56,7 +79,7 @@ def post_edit(pid):
         tags = html_filter.findall(raw_content)
         for tag in tags:
             raw_content = raw_content.replace(tag, '')
-        post.content = raw_content
+        post.content = raw_content.encode('utf-8')
         posts.update_post(post)
         return redirect(url_for('index'))
 
