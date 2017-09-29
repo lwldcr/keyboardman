@@ -29,6 +29,7 @@
          <li><a href="{{ url_for('login') }}">登录</a></li>
               {% else %}
               <li><a href="{{ url_for('post_create') }}">新建blog</a></li>
+              <li><a href="{{ url_for('logout') }}">登出</a></li>
           {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->

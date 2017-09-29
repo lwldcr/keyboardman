@@ -87,7 +87,11 @@ def post_edit(pid):
 @app.route("/post/<int:pid>/delete", methods=["GET", "POST"])
 def post_delete(pid):
     ret = posts.delete_post(pid)
-    return jsonify({'status': ret})
+    if ret:
+        flash("post deleted successfully!")
+    else:
+        flash("delete failed!")
+    return redirect(url_for("index"))
 
 
 @app.route("/logout")
