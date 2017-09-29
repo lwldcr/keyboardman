@@ -9,7 +9,7 @@
                 <h3>{{ post.title }}</h3>
                 -------------------------
                 {% if post.tags_valid() %}
-                <p>{{ post.tags }}</p>
+                <p>{{ post.show_tags() }}</p>
                 {% else %}
                 <p>NO TAGS</p>
                 {% endif %}

@@ -29,10 +29,12 @@
                     <a href="{{ url_for('post_detail',pid=post.id) }}">
                         <span class="label label-success">阅读全文</span>
                     </a>
+                    <span class="label label-default">{{ post.show_tags() }}</span>
                 {% if session.username %}
                     <a href="{{ url_for('post_detail',pid=post.id) }}#comments">
-                        <span class="label label-primary">{% if post.tags_valid() %}{{ post.tags }}{% endif %}评论</span>
+                        <span class="label label-primary">评论</span>
                     </a>
+
                     {% if session.username == post.author %}
 
                     <a href="{{ url_for('post_edit', pid=post.id) }}">

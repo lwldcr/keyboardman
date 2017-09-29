@@ -54,12 +54,13 @@ def post_create():
     else:
         title = request.form.get('title')
         text = request.form.get('editor1')
-        tags = html_filter.findall(text)
-        for tag in tags:
+        html_tags = html_filter.findall(text)
+        for tag in html_tags:
             text = text.replace(tag, '')
+        tags = request.form.get('tags')
 
         p = Post([-1, title.encode('utf-8'), text.encode('utf-8'),
-                  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), session.get('username'), ''])
+                  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), session.get('username'), tags.encode('utf-8')])
 
         ret = add_post(p)
         if ret:

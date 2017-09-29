@@ -40,6 +40,13 @@ class Post(object):
             return False
         return True
 
+    def show_tags(self):
+        try:
+            tags_str = ','.join(self.tags)
+        except:
+            tags_str = ''
+        return tags_str
+
 class Author(object):
     def __init__(self, name, desc):
         self.name = name
