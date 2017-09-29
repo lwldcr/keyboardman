@@ -89,6 +89,24 @@ class User(object):
         )
 
 
+def add_user(username, password):
+    try:
+        if User.get_user_by_name(username):
+            return False
+        user = User(username, password)
+        sql = "insert into `users` (username,password,activated,permission_level) values ('{}','{}',{},{})".format(
+                user.username,
+                md5(str(user.password).encode('utf-8')).hexdigest(),
+                1 if user.activated else 0,
+                user.permission
+        )
+        with DbConn(DB) as db:
+            db.execute(sql)
+    except Exception as e:
+        print(e)
+        return False
+    return True
+
 if __name__ == '__main__':
     u = User.get_user_by_name("bruce")
     print(u)

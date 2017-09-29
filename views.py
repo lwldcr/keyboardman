@@ -5,7 +5,7 @@ from flask import render_template, flash, request, abort, redirect,\
     url_for, session, jsonify
 import posts
 from utils import is_safe_url
-from models import User
+from models import User, add_user
 import re
 
 html_filter = re.compile(r'\<.*?\>')
@@ -62,7 +62,7 @@ def post_edit(pid):
 
 
 @app.route("/post/<int:pid>/delete", methods=["GET", "POST"])
-def post_delte(pid):
+def post_delete(pid):
     ret = posts.delete_post(pid)
     return jsonify({'status': ret})
 
@@ -74,6 +74,16 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route("/register")
+@app.route("/register", methods=['GET', 'POST'])
 def register():
-    return render_template("register.html")
+    if  request.method == "GET":
+        return render_template("register.html")
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        print(username, password)
+        ret = add_user(username, password)
+        if ret:
+            return redirect(url_for("login"))
+        else:
+            return redirect(url_for("register"))

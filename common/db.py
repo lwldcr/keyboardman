@@ -9,7 +9,8 @@ import os
 from contextlib import closing
 
 RootDir = os.path.dirname(__file__)
-DB = os.path.join(RootDir, '..', 'data', 'posts.db')
+DataDir = os.path.join(RootDir, '..', 'data')
+DB =  os.path.join(DataDir, 'posts.db')
 
 
 def connect_db(db=DB):
@@ -17,9 +18,19 @@ def connect_db(db=DB):
 
 
 def init_db():
+    if not os.path.isdir(DataDir):
+        try:
+            os.mkdir(DataDir)
+        except: # cannot make dir
+            return
+
     with closing(connect_db()) as db:
-        with open('schema.sql', encoding='utf-8') as f:
-            db.cursor().executescript(f.read())
+        try:
+            f = open('schema.sql', encoding='utf-8')
+        except:
+            f = open('schema.sql')
+
+        db.cursor().executescript(f.read())
         db.commit()
 
 

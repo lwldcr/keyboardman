@@ -2,8 +2,13 @@
 
 __author__ = 'LIWEI240'
 
-from urllib.parse import urlparse, urljoin
+try:
+    from urllib.parse import urlparse, urljoin
+except:
+    from urlparse import urljoin, urlparse
+
 from flask import request
+
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
